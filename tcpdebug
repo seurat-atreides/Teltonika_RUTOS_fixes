@@ -5,8 +5,11 @@ STOP=1
 USE_PROCD=1
 
 start_service() {
+    # shellcheck disable=SC3043
+    {
     local enabled storage filter interface host port direction host port
     local OPTIONS=""
+    }
     config_load "system"
 
     config_get enabled "system" tcp_dump ""
@@ -23,22 +26,22 @@ start_service() {
     then
         OPTIONS="-C 5 -W 1"
     fi
-
+    # Added a new filter creation logic to make it more readable
     if [ "$host" != "" ] && [ "$port" != "" ]; then
-        if [ $filter != "" ]; then
-            filter=$filter" and host $host and port $port"
+        if [ "$filter" != "" ]; then
+            filter="$filter and host $host and port $port"
         else
             filter=" host $host and port $port"
         fi
     elif [ "$host" != "" ] && [ "$port" = "" ]; then
-        if [ $filter != "" ]; then
-            filter=$filter" and host $host"
+        if [ "$filter" != "" ]; then
+            filter="$filter and host $host"
         else
             filter=" host $host"
         fi
     elif [ "$host" = "" ] && [ "$port" != "" ]; then
-        if [ $filter != "" ]; then
-            filter=$filter" and port $port"
+        if [ "$filter" != "" ]; then
+            filter="$filter and port $port"
         else
             filter=" port $port"
         fi
@@ -46,7 +49,7 @@ start_service() {
 
     procd_open_instance
     COMMAND="/usr/sbin/tcpdump $OPTIONS -i $interface -Q $direction -w $storage/tcpdebug.pcap $filter"
-    procd_set_param command $COMMAND
+    procd_set_param command "$COMMAND"
     procd_set_param respawn
     procd_close_instance
 }
