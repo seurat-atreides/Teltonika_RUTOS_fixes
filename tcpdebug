@@ -34,7 +34,7 @@ start_service() {
 	then
 		_options="-C 5 -W 1"
 	fi
-	# Added a new _filter creation logic to make it work and more readable
+	# Added a new _filter creation logic to make it work and be more readable
 	if [ "$_host" != "" ] && [ "$_port" != "" ]
 	then
 			if [ "$_filter" != "" ]
