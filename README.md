@@ -31,7 +31,7 @@ The author decided to make the host and port filter parameters part of the optio
 procd_append_param command $options
 ```
 I.e., if filter is not empty, then append it to the command. After this append the options.
-This is destined to fail. 
+This is destined to fail.
 The filter should be appended to the command after the options and the syntax should include the required logical oprator "and". E.g., "tcp and host <IPaddr> and port <port_nr>".
 The root cause beeing thjat you can't add the protocol filter and then the options containing the host and/or port parameters.
 This leads to the tcpdump command failing execution!
@@ -73,7 +73,7 @@ fi
 ```
 After this code block I propose to append the configuration parameters in a more traditional manner:
 ```shell
-procd_append_param command $OPTIONS	
+procd_append_param command $OPTIONS
 [ -n "$interface" ] && procd_append_param command -i "$interface"
 [ -n "$direction" ] && procd_append_param command -Q "$direction"
 [ -n "$filter" ] && procd_append_param command "$filter"
@@ -87,3 +87,6 @@ ps -w | grep tcpdump
 ```
 This is the command composition I was expecting to see!<br>
 BTW, I reduced the PCAP file size to 1MB (-C 1) and no rotation (-W 1) to keep the RAM usage lower.
+
+> [!NOTE]
+> The script was refactored using VS-Code. AKAIK it's ScriptCheck conform.
