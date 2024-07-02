@@ -89,4 +89,4 @@ This is the command composition I was expecting to see!<br>
 BTW, I reduced the PCAP file size to 1MB (-C 1) and no rotation (-W 1) to keep the RAM usage lower.
 
 > [!NOTE]
-> The script was refactored using VS-Code. AKAIK it's ScriptCheck conform.
+> The script was refactored using VS-Code. AFAIK it's ScriptCheck conform.
