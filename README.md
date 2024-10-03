@@ -18,7 +18,7 @@ Configuring tcpdump with protocl filter but no host or port filter also works:
 But the composition of the tcpdump command is not what I expected. IMHO, the host and port parameters should be part of the filter and not the options.
 
 # Analysis of the root cause for the problem
-Analysing the code in the tcpdebubg script it looks like the following code block is the cause for the script not producing the expected result when host and port parameters are included:
+Analysing the code in the tcpdebubg script it looks like the following code block is the cause for the script not producing the expected result when host and port parameters are included together with the protocoll filter:
 ```shell
 [ "$storage" = "/tmp" ] && options="-C 20 -W 1"
 [ "$host" != "" -a "$port" != "" ] && options="$options host $host and port $port"
@@ -30,7 +30,7 @@ The author decided to make the host and port filter parameters part of the optio
 [ -n "$filter" ] && procd_append_param command "$filter"
 procd_append_param command $options
 ```
-I.e., if filter is not empty, then append it to the command. After this append the options.
+I.e., if $filter is not empty, then append it to the command. After this append the options.
 This is destined to fail.
 The filter should be appended to the command after the options and the syntax should include the required logical oprator "and". E.g., "tcp and host <IPaddr> and port <port_nr>".
 The root cause beeing thjat you can't add the protocol filter and then the options containing the host and/or port parameters.
@@ -44,7 +44,7 @@ if [ "$storage" = "/tmp" ]
 then
 		OPTIONS="-C 1 -W 1"
 fi
-# Added a new filter creation logic to make it work and more readable
+# Added a new filter creation logic to make it work and better readable
 if [ "$host" != "" ] && [ "$port" != "" ]
 then
 		if [ "$filter" != "" ]
